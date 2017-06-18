@@ -1,0 +1,179 @@
+
+<html lang="en">
+    <head>
+        <title>ejs</title>
+        <% include ./partials/scripts %>
+
+         
+        <style>
+        
+            .container {
+                position: absolute;
+                right:10%;
+                left: 10%;
+                top:10%;
+                align-items: center;
+                border: 2px solid black;
+                width:1200px;
+                height:600px;
+            }
+
+            .row {
+                display: table;
+                width:100%;
+                height:100%;
+            }
+            #obj1{
+                border: 2px solid black;
+                float: none;
+                width: 25%;
+                display: table-cell;
+                vertical-align: center;
+                position: relative;
+                /*padding-bottom: 50px;*/
+            }
+            #obj2{
+                display: block;
+                float: none;
+                width: 100%;
+                height: 100%;
+                vertical-align: center;
+                position: relative;
+                /*padding-bottom: 50px;*/
+            }
+            #obj3{
+                float: none;
+                width: 60%;
+                display: table-cell;
+                vertical-align: center;
+                position: relative;
+                overflow: auto;
+                overflow-x: hidden;
+                
+                /*padding-bottom: 50px;*/
+            }
+            
+            .nav-pills>li>a {
+                border-radius: 4px;
+                margin-top: 120px;
+            }
+            .list-group{
+                margin-top: 100px;
+                position: absolute;
+                width:700px;
+            }
+      
+        </style>
+        
+    </head>
+    <body>
+       
+        
+    <div class="container">
+        <div class="row">
+            <div id='obj1' class="col-md-4 ">
+            
+                <ul class="nav nav-pills nav-stacked" role="tablist">
+                    <li id='option' style="text-align: center;"><a style="background-color: gainsboro;" >Option</a></li>
+                    <li style="background-color: gainsboro;text-align: center;">
+                        <a >Quantity</a>
+                        <input placeholder="Type here" type="text" size="6" id='quantity' />
+                    </li>        
+                </ul>
+            
+            </div>
+            <div class="col-md-4 " id='obj2'>
+                <div class="dropdown" style="position: absolute;margin-top: 120px;">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Dropdown
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                        <li role="presentation"><a role="menuitem" tabindex="-1" id='a' >A</a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" id='b'>B</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id='obj3' class="col-md-4 " >
+               <ul class="list-group">
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+  
+    <script type="text/javascript">
+        $(".dropdown").on('click', 'li a', function(){
+            $(".btn:first-child").text($(this).text());
+            $(".btn:first-child").val($(this).text());
+        });
+        
+        $('#obj3').click(function(){
+            $('#obj2').fadeOut();
+            $('#obj1').css('width','40%');
+            $('#obj3').css('width','60%');
+        })
+       var isTrue= false;
+
+        $('#option').click(function(){
+            if(isTrue == false){
+                $('#obj2').fadeOut();
+                $('#obj1').css('width','40%');
+                $('#obj3').css('width','60%');
+                isTrue = true;
+            }else if(isTrue == true){
+                $('#obj2').fadeIn();
+                $('#obj1').css('width','100%');
+                $('#obj1').css('width','25%');
+                $('#obj2').css('width','60%');
+                isTrue = false;
+            }
+            
+        })
+            
+        $('#a').click(function(){
+            var quantity= $('#quantity').val();
+            
+            if(quantity != "" ){
+                $('#quantity').css('border-color','black')
+                $.get("http://localhost:3000/index/a/"+quantity, function(data, status){
+                    var htmls='';
+                    $('.list-group').empty();
+                    for(var obj in data)
+                    {
+                        htmls+= '<li class="list-group-item">'+data[obj]+'</li>'
+                    
+                    }
+                    $('.list-group').append(htmls)
+                });
+            }else {
+                $('#quantity').css('border-color','red')
+                $('.list-group').empty();
+            }
+        })
+            
+        $('#b').click(function(){
+            var quantity= $('#quantity').val();
+            if(quantity != "" ){
+                $('#quantity').css('border-color','black')
+            $.get("http://localhost:3000/index/b/"+quantity, function(data, status){
+                var htmls='';
+                $('.list-group').empty();
+                for(var obj in data)
+                {
+                    htmls+= '<li class="list-group-item">'+data[obj]+'</li>'
+                    
+                }
+                $('.list-group').append(htmls)
+            });
+            }else {
+                $('#quantity').css('border-color','red')
+                $('.list-group').empty();
+            }
+        })
+          
+    </script>
+
+    
+    </body>
+</html>
+
+
